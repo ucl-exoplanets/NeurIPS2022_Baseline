@@ -140,7 +140,7 @@ y_pred_org = np.swapaxes(y_pred_org, 1,0)
 ## Package!
 # extract quartiles estimate for 25th, 50th and 75th percentile.
 all_q1_pred, all_q2_pred, all_q3_pred = np.quantile(y_pred_org, [0.25,0.5,0.75],axis=1)
-LT_submission = to_light_track_format(all_q1_pred, all_q2_pred, all_q3_pred)
+LT_submission = to_light_track_format(all_q1_pred, all_q2_pred, all_q3_pred,planet_ID = aux_test_data.planet_ID.to_numpy(),)
 RT_submission = to_regular_track_format(y_pred_org, 
                                         np.ones((y_pred_org.shape[0],y_pred_org.shape[1])),
                                         planet_ID = aux_test_data.planet_ID.to_numpy(),
