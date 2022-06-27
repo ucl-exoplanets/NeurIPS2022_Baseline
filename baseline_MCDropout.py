@@ -37,6 +37,9 @@ dropout = 0.1
 # number of examples to generate in test time
 N_samples = 1000
 
+#fix seed
+np.random.seed(42)
+keras.utils.set_random_seed(42)
 
 training_path = '../NeurIPS_Competition/competition_script/data_generation/TrainingData2'
 training_path = args.training
