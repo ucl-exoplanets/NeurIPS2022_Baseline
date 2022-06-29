@@ -11,9 +11,15 @@ python baseline_MCDropout.py --training PATH/TO/TRAININGDATA/ --test PATH/TO/TES
 2. via jupyter notebook, baseline - MCDropout-Public.ipynb
 
 ## Description
-We trained a neural network to perform a supervised multi-target regression task. The architecture of the network is modified from the CNN network as described in [Yip et al.](https://arxiv.org/abs/2011.11284). We performed minimal preprocessing steps to the training data, such as augmenting the data to incorporate observation noise, standardising the input features and adding stellar and planetary radii from auxiliary data. 
+We trained a neural network to perform a supervised multi-target regression task. The architecture of the network is modified from the CNN network as described in [Yip et al.](https://arxiv.org/abs/2011.11284). 
 
-At test time we performed [Monte Carlo Dropout](https://arxiv.org/abs/1506.02142) to provide a mutlivariate distribution for each test example. Samples from the mutlivariate distribution is submitted to the regular track.  Quartiles estimates are extracted from the same distribution to submit to the light track.
+## Preprocessing Steps
+- We used the first 5000 data instances to train the model
+- We augmented the data with the observation noise
+- Used stellar and planetary radii as additional features
+- Standardised both inputs and output
+
+At test time we performed [Monte Carlo Dropout](https://arxiv.org/abs/1506.02142) to provide a mutlivariate distribution for each test example. Samples from the mutlivariate distribution is submitted to the regular track. Quartiles estimates are extracted from the same distribution to submit to the light track.
 
 ## Things to improve
 There are different direction to take from here on, let us summarise the shortcoming of this model:
