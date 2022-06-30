@@ -31,7 +31,7 @@ N = 5000 # train on the first 5000 data instances
 #hyperparameter settings
 batch_size= 32
 lr= 1e-3
-epochs = 50
+epochs = 10
 filters = [32,64,128]
 dropout = 0.1
 # number of examples to generate in test time
@@ -141,11 +141,10 @@ y_pred_org = np.swapaxes(y_pred_org, 1,0)
 
 
 ## Package!
-# extract quartiles estimate for 25th, 50th and 75th percentile.
-all_q1_pred, all_q2_pred, all_q3_pred = np.quantile(y_pred_org, [0.25,0.5,0.75],axis=1)
-LT_submission = to_light_track_format(all_q1_pred, all_q2_pred, all_q3_pred,planet_ID = aux_test_data.planet_ID.to_numpy(),)
+# extract quartiles estimate for 16th, 50th and 84th percentile.
+all_q1_pred, all_q2_pred, all_q3_pred = np.quantile(y_pred_org, [0.16,0.5,0.84],axis=1)
+LT_submission = to_light_track_format(all_q1_pred, all_q2_pred, all_q3_pred,)
 RT_submission = to_regular_track_format(y_pred_org, 
-                                        np.ones((y_pred_org.shape[0],y_pred_org.shape[1])),
-                                        planet_ID = aux_test_data.planet_ID.to_numpy(),
+                                        np.ones((y_pred_org.shape[0],y_pred_org.shape[1]))/np.sum(np.ones(y_pred_org.shape[1]) ) , 
                                      name="RT_submission.hdf5")
 
