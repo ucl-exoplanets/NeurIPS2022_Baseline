@@ -21,6 +21,9 @@ We trained a neural network to perform a supervised multi-target regression task
 
 At test time we performed [Monte Carlo Dropout](https://arxiv.org/abs/1506.02142) to provide a mutlivariate distribution for each test example. Samples from the mutlivariate distribution is submitted to the regular track. Quartiles estimates are extracted from the same distribution to submit to the light track.
 
+## Metrics
+We have inlcuded the metric we used to compute score for light track and regular track. Please note that the regular could be quite slow. We have used the [POT](https://pythonot.github.io/index.html) python package to compute the Wessestein-2 distance. 
+
 ## Things to improve
 There are different direction to take from here on, let us summarise the shortcoming of this model:
 - The data preprocessing is quite simplitic and could have invested more efforts.
