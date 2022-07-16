@@ -2,24 +2,19 @@
 
 import numpy as np
 
-def scaled_SE(x, x_hat):
-    rel_diff = (x- x_hat)/x 
-    val = np.square(rel_diff)
-    return val
-
-def light_track_metric(x, x_hat, k =1000):
+def light_track_metric(targets, predictions, k =1000):
     """
     RMSE based Metric for light track. Compare quartiles between MCMC-based methods and model output"
-    x: The reference quartiles generated from a MCMC technique (N, 3, num_targets,)
-    x_hat: The quartiles predicted by  ( N, 3, num_targets,)
+    x: The reference quartiles generated from a MCMC technique (N x 3 x num_targets,)
+    x_hat: The quartiles predicted by  ( N x 3 x num_targets,)
     k: constant , used to adjust the magnitude of the score. Default = 10
     
     """
-    SE_array = scaled_SE(x, x_hat)
-    MSE_array = np.mean(SE_array, axis=(1,2))
-    RMSE_array = np.sqrt(MSE_array)
-    sum_array = np.sum(RMSE_array)
-    score = 1000 - k*(sum_array/(x.shape[0]))
+    targets = targets.flatten()
+    predictions = predictions.flatten()
+    scaled_x = targets/targets
+    scaled_x_hat = predictions/targets
+    score= k*(1-np.sqrt(((scaled_x - scaled_x_hat) ** 2).mean()))
     print("score is:",score)
     return score
 
