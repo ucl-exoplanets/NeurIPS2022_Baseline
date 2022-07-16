@@ -38,7 +38,7 @@ epochs = 10
 filters = [32,64,128]
 dropout = 0.1
 # number of examples to generate in evaluation time (5000 is max for this competition)
-N_samples = 1000
+N_samples = 5000
 threshold = 0.8
 
 #fix seed
@@ -157,7 +157,7 @@ trace1_matrix = y_pred_valid_org
 # assuming uniform weight, and the weights must sum to 1
 trace1_weights_matrix = np.ones((trace1_matrix.shape[0], trace1_matrix.shape[1]))/trace1_matrix.shape[1] 
 
-# batch_calculate(trace1_matrix, trace1_weights_matrix, GT_trace_path, id_order = valid_index)
+batch_calculate(trace1_matrix, trace1_weights_matrix, GT_trace_path, id_order = valid_index)
 
 ## now we package the prediction for submission to the website.
 
