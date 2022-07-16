@@ -98,8 +98,8 @@ def calculate_w2(trace1, trace2, w1=None, w2=None, normalise = True, bounds_matr
         b = w2
     M /= M.max()
     # numItermax controls the Max number of iteration before the solver "gives up" and return the result, 
-    # recommended to use at least 500000 iterations for good results
-    W2 = ot.emd2(a, b, M, numItermax=500000)
+    # recommended to use at least 100000 iterations for good results
+    W2 = ot.emd2(a, b, M, numItermax=200000)
     # turn into an increasing score
     score = 1000* (1-W2)
     return score
