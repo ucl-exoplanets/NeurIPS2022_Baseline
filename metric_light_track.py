@@ -5,8 +5,8 @@ import numpy as np
 def light_track_metric(targets, predictions, k =1000):
     """
     RMSE based Metric for light track. Compare quartiles between MCMC-based methods and model output"
-    x: The reference quartiles generated from a MCMC technique (N x 3 x num_targets,)
-    x_hat: The quartiles predicted by  ( N x 3 x num_targets,)
+    targets: The reference quartiles generated from a MCMC technique (N x 3 x num_targets,)
+    predictions: The quartiles predicted by  ( N x 3 x num_targets,)
     k: constant , used to adjust the magnitude of the score. Default = 10
     
     """
@@ -14,7 +14,7 @@ def light_track_metric(targets, predictions, k =1000):
     predictions = predictions.flatten()
     scaled_x = targets/targets
     scaled_x_hat = predictions/targets
-    score= k*(1-np.sqrt(((scaled_x - scaled_x_hat) ** 2).mean()))
+    score= k*(10-np.sqrt(((scaled_x - scaled_x_hat) ** 2).mean()))
     print("score is:",score)
     return score
 
