@@ -2,7 +2,7 @@
 
 import numpy as np
 
-def light_track_metric(targets, predictions, k =1000):
+def light_track_metric(targets, predictions, k =100):
     """
     RMSE based Metric for light track. Compare quartiles between MCMC-based methods and model output"
     targets: The reference quartiles generated from a MCMC technique (N x 3 x num_targets,)
