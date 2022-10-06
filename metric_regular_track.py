@@ -27,6 +27,15 @@ def batch_calculate(trace1_matrix, trace1_weights_matrix, trace2_hdf5, id_order 
         id_order = np.arange(len(trace1_matrix))
     else:
         pass
+    # check size of the distribution 
+    size = trace1_weights_matrix.shape[1]
+    if (size <1000) or (size > 5000):
+        print("Distribution size must be within 1000 to 5000")
+        return None
+    else:
+        pass
+
+
     all_score = 0
     # ID_order = aux_test_data['planet_ID'].to_numpy()
     for i, val in tqdm(enumerate(id_order)):
@@ -42,10 +51,14 @@ def batch_calculate(trace1_matrix, trace1_weights_matrix, trace2_hdf5, id_order 
 
 
 def batch_calculate_from_file(trace1_hdf5, trace2_hdf5):
+    """calculate score from two .hdf5 files."""
     # read data from hdf5
     trace1 = h5py.File(trace1_hdf5,'r')
     trace2 = h5py.File(trace2_hdf5,'r')
     trace1_keys = [p for p in trace1.keys()]
+    # assume trace1 is coming from participants
+    check_distribution(trace1, trace1_keys)
+
     all_score = 0
     # ID_order = aux_test_data['planet_ID'].to_numpy()
     for val in tqdm(trace1_keys):
@@ -118,5 +131,23 @@ def default_prior_bounds():
 
 def normalise_arr(arr, bounds_matrix):
     norm_arr = (arr - bounds_matrix[:,0])/(bounds_matrix[:,1]- bounds_matrix[:,0])
+    norm_arr = restrict_to_prior(norm_arr)
     return norm_arr
 
+def restrict_to_prior(arr,):
+    # updates 06-oct, restrict values to default prior range 
+    arr[arr<0] = 0
+    arr[arr>1] = 1
+    return arr
+
+def check_distribution(File, UserPlanets):
+    # updates from 06-Oct, perform various checks on the file, some of these changes are noted in submit_format.py from the baseline
+    for planet in UserPlanets:
+        traces = File[planet]['tracedata']
+        weights = File[planet]['weights']
+         ## sanity check - samples count should be the same for both
+        assert len(traces) == len(weights)
+        ## sanity check - weights must be able to sum to one.
+        assert np.isclose(np.sum(weights),1)
+        ## size of distribution must be between 1000 to 5000
+        assert ((len(weights) > 1000) & (len(weights)<5000))
