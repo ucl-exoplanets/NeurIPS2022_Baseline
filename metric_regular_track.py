@@ -121,11 +121,11 @@ def calculate_w2(trace1, trace2, w1=None, w2=None, normalise = True, bounds_matr
 
 def default_prior_bounds():
     T_range = [0,7000]
-    gas1_range = [-12, -2]
-    gas2_range = [-12, -2]
-    gas3_range = [-12, -2]
-    gas4_range = [-12, -2]
-    gas5_range = [-12, -2]
+    gas1_range = [-12, -1]
+    gas2_range = [-12, -1]
+    gas3_range = [-12, -1]
+    gas4_range = [-12, -1]
+    gas5_range = [-12, -1]
     bounds_matrix = np.vstack([T_range,gas1_range,gas2_range,gas3_range,gas4_range,gas5_range])
     return bounds_matrix
 
