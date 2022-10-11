@@ -120,7 +120,7 @@ def calculate_w2(trace1, trace2, w1=None, w2=None, normalise = True, bounds_matr
 """General Helper Functions"""
 
 def default_prior_bounds():
-    T_range = [0,3000]
+    T_range = [0,7000]
     gas1_range = [-12, -2]
     gas2_range = [-12, -2]
     gas3_range = [-12, -2]
