@@ -3,6 +3,7 @@ import numpy as np
 import ot
 import h5py
 from tqdm import tqdm
+import nestle
 """
 -----Main Functions----
 W2 - Wessestein-2 distance (implemented by POT package https://pythonot.github.io/)
@@ -35,7 +36,6 @@ def batch_calculate(trace1_matrix, trace1_weights_matrix, trace2_hdf5, id_order 
     else:
         pass
 
-
     all_score = 0
     # ID_order = aux_test_data['planet_ID'].to_numpy()
     for i, val in tqdm(enumerate(id_order)):
@@ -43,7 +43,10 @@ def batch_calculate(trace1_matrix, trace1_weights_matrix, trace2_hdf5, id_order 
         samples1_weight = trace1_weights_matrix[i]
         samples2 = trace2[f'Planet_{val}']['tracedata'][:]
         samples2_weight = trace2[f'Planet_{val}']['weights'][:]
-        one_score = calculate_w2(samples1, samples2,w1=samples1_weight,w2=samples2_weight,normalise=True)
+        # we assumed sample1 is from the participants and sample2 is from the GT.
+        ResampledUserTrace= nestle.resample_equal(samples1,samples1_weight)
+        ResampledUserWeights = np.ones(len(ResampledUserTrace))/len(ResampledUserTrace)
+        one_score = calculate_w2(ResampledUserTrace, samples2,w1=ResampledUserWeights,w2=samples2_weight,normalise=True)
         all_score += one_score
     overall_mean_score = all_score/len(trace1_matrix)
     print("score is:",overall_mean_score)
@@ -66,7 +69,10 @@ def batch_calculate_from_file(trace1_hdf5, trace2_hdf5):
         samples1_weight = trace1[val]['weights'][:]
         samples2 = trace2[val]['tracedata'][:]
         samples2_weight = trace2[val]['weights'][:]
-        one_score = calculate_w2(samples1, samples2,w1=samples1_weight,w2=samples2_weight,normalise=True)
+        # we assumed sample1 is from the participants and sample2 is from the GT.
+        ResampledUserTrace= nestle.resample_equal(samples1,samples1_weight)
+        ResampledUserWeights = np.ones(len(ResampledUserTrace))/len(ResampledUserTrace)
+        one_score = calculate_w2(ResampledUserTrace, samples2,w1=ResampledUserWeights,w2=samples2_weight,normalise=True)
         all_score += one_score
     overall_mean_score = all_score/len(trace1_keys)
     print("score is:",overall_mean_score)
@@ -151,3 +157,5 @@ def check_distribution(File, UserPlanets):
         assert np.isclose(np.sum(weights),1)
         ## size of distribution must be between 1000 to 5000
         assert ((len(weights) > 1000) & (len(weights)<5000))
+        ## weights must not be negatively negative
+        assert np.sum(weights<0) == 0 
